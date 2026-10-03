@@ -161,3 +161,9 @@ site's filter categories, which are not in the CSV, so they are read from
 
 `webapp/railway.json` sets the start command
 (`uvicorn main:app --host 0.0.0.0 --port $PORT`) and the `/health` check.
+
+### Deploy on Replit
+
+1. On [replit.com](https://replit.com), choose **Create App → Import from GitHub** and paste the repository URL.
+2. Click **Run** to test. The `.replit` file installs `webapp/requirements.txt` and starts the server on port 8080.
+3. Click **Deploy** and choose **Autoscale**. The live `*.replit.app` URL appears when the deployment finishes.

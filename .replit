@@ -1,0 +1,11 @@
+modules = ["python-3.12"]
+run = "pip install -q -r webapp/requirements.txt && cd webapp && python -m uvicorn main:app --host 0.0.0.0 --port 8080"
+
+[[ports]]
+localPort = 8080
+externalPort = 80
+
+[deployment]
+build = ["sh", "-c", "pip install -r webapp/requirements.txt"]
+run = ["sh", "-c", "cd webapp && python -m uvicorn main:app --host 0.0.0.0 --port 8080"]
+deploymentTarget = "autoscale"
