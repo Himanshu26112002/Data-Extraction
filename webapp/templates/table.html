@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}
+<style>
+  .toolbar { display:flex; gap:12px; align-items:center; margin-bottom:12px; flex-wrap:wrap; }
+  input { padding:9px 12px; border:1px solid var(--line); border-radius:8px; width:min(360px, 100%); font-size:14px; }
+  .wrap { overflow:auto; max-height:calc(100vh - 190px); background:var(--card); border:1px solid var(--line); border-radius:10px; }
+  table { border-collapse:collapse; font-size:13px; width:100%; }
+  th { position:sticky; top:0; background:#f0f2f5; text-align:left; padding:10px; white-space:nowrap; border-bottom:1px solid var(--line); }
+  td { padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; min-width:110px; }
+  td div { max-height:4.5em; overflow:hidden; }
+  td:hover div { max-height:none; }
+  tr:hover td { background:#f9fafb; }
+</style>
+{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+<div class="toolbar">
+  <input id="search" type="search" placeholder="Search any column...">
+  <span class="muted" id="count">{{ rows|length }} rows</span>
+</div>
+<div class="wrap">
+  <table>
+    <thead><tr>{% for c in columns %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+    <tbody id="rows">
+      {% for row in rows %}
+      <tr>{% for value in row %}
+        <td><div>{% if value.startswith('http') %}<a href="{{ value }}" target="_blank" rel="noopener">{{ value }}</a>{% else %}{{ value }}{% endif %}</div></td>
+      {% endfor %}</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<script>
+  const rows = [...document.querySelectorAll("#rows tr")];
+  document.getElementById("search").addEventListener("input", e => {
+    const q = e.target.value.toLowerCase();
+    let shown = 0;
+    rows.forEach(r => {
+      const match = r.textContent.toLowerCase().includes(q);
+      r.style.display = match ? "" : "none";
+      shown += match;
+    });
+    document.getElementById("count").textContent = `${shown} rows`;
+  });
+</script>
+{% endblock %}

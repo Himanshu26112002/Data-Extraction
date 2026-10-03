@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+  .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-bottom:28px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; text-decoration:none; color:inherit; }
+  .card:hover { border-color:var(--accent); }
+  .big { font-size:32px; font-weight:700; margin:6px 0; }
+  .answers { display:grid; grid-template-columns:repeat(auto-fit, minmax(380px, 1fr)); gap:24px; }
+  table { border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; width:100%; }
+  th, td { padding:10px 16px; border-bottom:1px solid var(--line); text-align:left; }
+  th { background:#f0f2f5; font-size:13px; color:var(--muted); font-weight:600; }
+  th:last-child, td:last-child { text-align:right; }
+  td:last-child { font-weight:600; }
+</style>
+{% endblock %}
+{% block content %}
+<h1>Overview</h1>
+<div class="cards">
+  <a class="card" href="/cruises">
+    <div class="muted">Disney Cruise Line</div>
+    <div class="big">{{ cruise_count }}</div>
+    <div class="muted">cruises scraped &rarr;</div>
+  </a>
+  <a class="card" href="/ingredients">
+    <div class="muted">IngredientsNetwork</div>
+    <div class="big">{{ company_count }}</div>
+    <div class="muted">companies scraped &rarr;</div>
+  </a>
+</div>
+
+<div class="answers">
+  {% for heading, answers in [("Disney Cruise answers", cruise_answers),
+                              ("IngredientsNetwork answers", ingredient_answers)] %}
+  <section>
+    <h1>{{ heading }}</h1>
+    <table>
+      <thead><tr><th>Question</th><th>Answer</th></tr></thead>
+      {% for question, value in answers %}
+      <tr><td><span class="muted">({{ ["i", "ii", "iii", "iv", "v"][loop.index0] }})</span> {{ question }}</td>
+          <td>{{ "{:,}".format(value) if value is number else value }}</td></tr>
+      {% endfor %}
+    </table>
+  </section>
+  {% endfor %}
+</div>
+<p class="muted">JSON: <a href="/api/cruises">/api/cruises</a> &middot; <a href="/api/ingredients">/api/ingredients</a></p>
+{% endblock %}
